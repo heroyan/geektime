@@ -27,7 +27,8 @@ class Geek:
 		}
 		self.api = {
 			'getArticles': 'https://time.geekbang.org/serv/v1/column/articles',
-			'getArticleContent': 'https://time.geekbang.org/serv/v1/article'
+			'getArticleContent': 'https://time.geekbang.org/serv/v1/article',
+			'getComments': 'https://time.geekbang.org/serv/v1/comments',
 		}
 		self.zhuanlan_dict = {
 			110: '邱跃的产品实践',
@@ -42,7 +43,8 @@ class Geek:
 			81: '从0开始学架构',
 			48: '左耳听风',
 			80: '硅谷产品实战36讲',
-			139: '左耳听MySQL实战45讲',
+			139: 'MySQL实战45讲',
+			133: '从0开始学大数据',
 		}
 
 
@@ -91,7 +93,7 @@ class Geek:
 
 		if audio_download_url:
 			audio = self.getStaticResouce(audio_download_url)
-			geek.saveContent(zhuanlanid, '%s.mp3' % article_title, audio)
+			geek.saveContent(zhuanlanid, '%s.mp3' % article_title, audio, False)
 
 
 	def getZhuanlan(self, zhuanlanid, timestamp, limit = 20, order = 'newest'):
@@ -101,9 +103,11 @@ class Geek:
 		@param limit 分页的页大小
 		@param order 排序方式 newest文章从新到旧，earliest则相反
 		'''
+		print 'start get zhuanlan', zhuanlanid
 		while True:
 			article_list = self.getArticles(zhuanlanid, timestamp, limit, order)
-			if not article_list or (timestamp > 0 and article_list[0].get('score') > timestamp):
+
+			if not article_list:
 				break
 
 			if timestamp > 0 and order == 'newest' and article_list[0].get('score') > timestamp:
@@ -111,6 +115,8 @@ class Geek:
 
 			if timestamp > 0 and order == 'earliest' and article_list[0].get('score') < timestamp:
 				break
+
+			print 'start get article'
 
 			for article in article_list:
 				timestamp = article.get('score')
@@ -123,8 +129,19 @@ class Geek:
 				# 限制时间，不要太频繁请求人家的服务器啦，做人要厚道
 				time.sleep(1)
 
+	def getComments(self, article_id, timestamp = 0):
+		'''获取文章评论
+		{"aid":"73188","prev":0}
+		'''
+		url = self.api.get('getComments')
+		data = {'aid':article_id, 'prev':timestamp}
 
-	def saveContent(self, zhuanlanid, file_name, content):
+		ret = self.__request(url, data)
+
+		return ret.get('data')
+
+
+	def saveContent(self, zhuanlanid, file_name, content, is_text = True):
 		'''保存内容到本地
 		'''
 		current_dir_path = os.path.dirname(os.path.realpath(__file__))
@@ -135,9 +152,13 @@ class Geek:
 		file_path = os.path.join(zhuanlanpath, file_name.encode('utf8').replace('/', '-'))
 		with open(file_path, 'wb') as f:
 			try:
-				f.write(content.encode('utf8'))
+				if is_text:
+					f.write(content.encode('utf8'))
+				else:
+					f.write(content)
+				print 'save file'
 			except Exception as e:
-				f.write(content)
+				print e, 'in saveContent'
 			
 
 	def __request(self, url, data = None, headers = None):
@@ -181,15 +202,17 @@ class Geek:
 
 if __name__ == '__main__':
 	cookie = ''
-	geek = Geek(cookie, {'http': 'web-proxy.tencent.com:8080'})
+	# geek = Geek(cookie, {'http': 'web-proxy.tencent.com:8080'})
+	geek = Geek(cookie)
 	#geek.getZhuanlan(81, 1527721200000)
 	#geek.getZhuanlan(63, 1514109600000)
 	#geek.getZhuanlan(113, 1535990400000)
 	# =====to get
-	# geek.getZhuanlan(140, 1544371200352, order = 'earliest')
-	# geek.getZhuanlan(143, 1544371200646, order = 'earliest')
-	# geek.getZhuanlan(126, 1544371200199, order = 'earliest')
-	# geek.getZhuanlan(79, 1544137200503, order = 'earliest')
+	# geek.getZhuanlan(140, 1546531200146, order = 'earliest')
+	# geek.getZhuanlan(143, 1546185600184, order = 'earliest')
+	# geek.getZhuanlan(126, 1546531200286, order = 'earliest')
+	# geek.getZhuanlan(79, 1546556400304, order = 'earliest')
 	# 花花的账号
-	geek.getZhuanlan(80, 0, order = 'earliest')
-	geek.getZhuanlan(139, 0, order = 'earliest')
+	# geek.getZhuanlan(80, 1530313200000, order = 'earliest')
+	# geek.getZhuanlan(139, 1546531200251, order = 'earliest')
+	print geek.getComments(73795)
