@@ -144,11 +144,8 @@ class Geek:
 		article_content = art.get('article_content')
 		article_title = art.get('article_title')
 
-		print article_title
-
 		# 文件名称处理
 		article_title = re.sub('[\/|\?|\*|\:|\||\\|\<|\>]', '-', article_title)
-		print article_title
 		print '%s.html' % article_title
 
 		article_title = article_title.encode('utf8')
