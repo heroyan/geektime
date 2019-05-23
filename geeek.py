@@ -153,7 +153,7 @@ class Geek:
 
 		if audio_download_url:
 			audio = self.getStaticResouce(audio_download_url)
-			geek.saveContent(zhuanlanid, '%s.mp3' % article_title, audio, False)
+			self.saveContent(zhuanlanid, '%s.mp3' % article_title, audio, False)
 
 
 	def getZhuanlan(self, zhuanlanid, timestamp, limit = 20, order = 'newest'):
@@ -283,7 +283,7 @@ class Geek:
 				self.zhuanlan_dict[zlid] = title
 				prev = lasttime.get(str(zlid)) or 0
 				print zlid, prev
-				prev = geek.getZhuanlan(zlid, prev, order = 'earliest')
+				prev = self.getZhuanlan(zlid, prev, order = 'earliest')
 				lasttime[str(zlid)] = prev
 				# 跑完一个专栏存一次
 				with open('lasttime.json', 'w') as ff:
@@ -296,3 +296,4 @@ class Geek:
 if __name__ == '__main__':
 	geek = Geek(COOKIE, PROXY)
 	geek.run()
+	# geek.getZhuanlan(126, 0, order = 'earliest')
