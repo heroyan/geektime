@@ -34,22 +34,7 @@ class Geek:
 			'getComments': 'https://time.geekbang.org/serv/v1/comments',
 			'getMyList': 'https://time.geekbang.org/serv/v1/my/products/list',
 		}
-		self.zhuanlan_dict = {
-			110: '邱跃的产品实践',
-			85: '趣谈网络协议',
-			143: '程序员的数学基础课',
-			140: 'Linux性能优化实战',
-			126: '数据结构与算法之美',
-			79: '技术领导力300讲',
-			42: '技术与商业案例解析',
-			113: '技术管理实战36讲',
-			63: '赵成的运维体系',
-			81: '从0开始学架构',
-			48: '左耳听风',
-			80: '硅谷产品实战36讲',
-			139: 'MySQL实战45讲',
-			133: '从0开始学大数据',
-		}
+		self.zhuanlan_dict = ZHUAN_DICT
 
 
 	def getAllZhuanlanList(self):
@@ -248,6 +233,7 @@ class Geek:
 
 		response = urllib2.urlopen(request) 
 		ret = response.read()
+		self.log(ret)
 
 		try:
 			ret = self.__jsonResponseResolve(ret)
@@ -260,6 +246,10 @@ class Geek:
 
 		return ret
 
+	def log(self, content):
+    		with open('geek.log', 'a+') as f:
+				f.write(content)
+				f.write("\n")
 
 	def __jsonResponseResolve(self, response):
 		'''响应处理
@@ -280,6 +270,10 @@ class Geek:
 			for zhuanlan in allList:
 				zlid = zhuanlan.get('extra').get('column_id')
 				title = zhuanlan.get('extra').get('column_title').encode('utf8')
+				# 只取个别专栏
+				if zlid != 112:
+    					continue
+
 				self.zhuanlan_dict[zlid] = title
 				prev = lasttime.get(str(zlid)) or 0
 				print zlid, prev
