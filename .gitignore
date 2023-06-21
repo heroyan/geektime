@@ -2,6 +2,7 @@
 *.pyc
 /local.py
 /download
+/.idea
 *.zip
 *.bak
 *.log
