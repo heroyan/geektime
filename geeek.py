@@ -198,7 +198,11 @@ class Geek:
 			dname = dname.decode('utf8')
 			file_name = file_name.decode('utf8')
 
-		zhuanlanpath = os.path.join(current_dir_path, dname)
+		download_path = os.path.join(current_dir_path, 'download')
+		if not os.path.exists(download_path):
+			os.mkdir(download_path)
+
+		zhuanlanpath = os.path.join(download_path, dname)
 		if not os.path.exists(zhuanlanpath):
 			os.mkdir(zhuanlanpath)
 
@@ -270,9 +274,6 @@ class Geek:
 			for zhuanlan in allList:
 				zlid = zhuanlan.get('extra').get('column_id')
 				title = zhuanlan.get('extra').get('column_title').encode('utf8')
-				# 只取个别专栏
-				if zlid != 112:
-    					continue
 
 				self.zhuanlan_dict[zlid] = title
 				prev = lasttime.get(str(zlid)) or 0
@@ -289,5 +290,5 @@ class Geek:
 
 if __name__ == '__main__':
 	geek = Geek(COOKIE, PROXY)
-	geek.run()
-	# geek.getZhuanlan(126, 0, order = 'earliest')
+	# geek.run()
+	geek.getZhuanlan(116, 0, order = 'earliest')

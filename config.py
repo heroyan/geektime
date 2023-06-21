@@ -4,15 +4,15 @@
 访问代理等配置信息
 '''
 
-# 登录后的cookie，验证登录态
+# 登录后的cookie，必填，验证登录态
 COOKIE = ''
 
-# 访问代理设置
+# 访问代理设置, 如无，则设置为空字典就行
 PROXY = {
     'http or https': 'your webproxy domain and port'
 }
 
-
+# 初始的专栏列表，可以置空
 ZHUAN_DICT = {
             110: '邱跃的产品实践',
             85: '趣谈网络协议',
