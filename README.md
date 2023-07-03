@@ -28,7 +28,7 @@ PROXY = {
 # 下载我订阅的所有专栏列表
 默认下载到当前目录的 download 目录下，以专栏名创建目录
 ```python
-from geeek import Geek
+from geek import Geek
 
 geek = Geek(cookie='', proxy='')
 geek.run()
@@ -36,7 +36,7 @@ geek.run()
 
 # 只下载某个专栏
 ```python
-from geeek import Geek
+from geek import Geek
 
 geek = Geek(cookie='', proxy='')
 geek.getZhuanlan(116, 0, order = 'earliest')
