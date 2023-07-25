@@ -174,7 +174,7 @@ class Geek:
 				self.getAndSaveArticle(zhuanlanid, article_id)
 
 				# 限制时间，不要太频繁请求人家的服务器啦，做人要厚道
-				time.sleep(1)
+				time.sleep(INTERVAL)
 
 		return timestamp
 
