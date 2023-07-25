@@ -23,27 +23,22 @@ PROXY = {
     'http': '',
     'https': '',
 }
+
+# 是否下载 mp3，由于下周音频比较耗时，可以选择性下载
+NEED_MP3 = False
 ```
 
 # 下载我订阅的所有专栏列表
 默认下载到当前目录的 download 目录下，以专栏名创建目录
 ```python
-from geek import Geek
-
-geek = Geek(cookie='', proxy='')
-geek.run()
+python geek.py
 ```
 
 # 只下载某个专栏
 ```python
-from geek import Geek
-
-geek = Geek(cookie='', proxy='')
-geek.getZhuanlan(116, 0, order = 'earliest')
+# 48是耗子叔的专栏 id《左耳听风》
+python geek.py 48
 ```
 
 # 生成 index.html索引页面
 专栏下载完成后，为每个专栏生成一个 index 索引文件，方便在一个页面上查看
-```
-python genIndexHtml.py  
-```

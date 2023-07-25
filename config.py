@@ -9,8 +9,10 @@ COOKIE = ''
 
 # 访问代理设置, 如无，则设置为空字典就行
 PROXY = {
-    'http or https': 'your webproxy domain and port'
 }
+
+# 是否下载 mp3，由于下周音频比较耗时，可以选择性下载
+NEED_MP3 = False
 
 # 初始的专栏列表，可以置空
 ZHUAN_DICT = {

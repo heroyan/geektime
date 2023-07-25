@@ -1,7 +1,7 @@
 #coding:utf8
 import os
 
-def genIndexHtml(rootDir, name):
+def genIndexHtmlOne(rootDir, name):
     with open('%s/index.html' % rootDir, 'w') as index:
         index.write('<title>%s</title>' % name)
         index.write('<script>function alterTitle(title){document.title=title;}</script><style>.main{width:100%;height: 100%;} .side {float:left;max-width:200px;height:100%;overflow:scroll;border:1px solid;} .content {overflow:hidden;} </style>\n')
@@ -14,7 +14,7 @@ def genIndexHtml(rootDir, name):
 
         index.write('</div><div class="content"><iframe width=100% height=100% name="main"/></div></div>')
 
-def main():
+def genIndexHtml():
     filters = ['.git', '.vscode', '.idea']
     for root, dirs, files in os.walk('./download'):
         for d in dirs:
@@ -29,7 +29,7 @@ def main():
                 continue
 
             print dir
-            genIndexHtml(os.path.join(root, d), d)
+            genIndexHtmlOne(os.path.join(root, d), d)
 
 if __name__ == '__main__':
-    main()
+    genIndexHtml()

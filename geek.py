@@ -5,7 +5,9 @@ import re
 import os
 import time
 import platform
+import sys
 from config import *
+from genIndexHtml import genIndexHtml
 
 class Geek:
 	'''docstring for Geek'''
@@ -136,7 +138,7 @@ class Geek:
 		article_title = article_title.encode('utf8')
 		self.saveContent(zhuanlanid, '%s.html' % article_title, article_content)
 
-		if audio_download_url:
+		if audio_download_url and NEED_MP3:
 			audio = self.getStaticResouce(audio_download_url)
 			self.saveContent(zhuanlanid, '%s.mp3' % article_title, audio, False)
 
@@ -242,6 +244,7 @@ class Geek:
 		try:
 			ret = self.__jsonResponseResolve(ret)
 			if ret.get('error'):
+				print(ret)
 				return False
 			
 			return ret
@@ -261,6 +264,15 @@ class Geek:
 
 		return json.loads(response)
 
+	def initAllMySubs(self):
+		'''
+		初始化看我订阅的列表
+		'''
+		allList = self.getAllZhuanlanList()
+		for zhuanlan in allList:
+			zlid = zhuanlan.get('extra').get('column_id')
+			title = zhuanlan.get('extra').get('column_title').encode('utf8')
+			self.zhuanlan_dict[zlid] = title
 
 	def run(self):
 		'''程序入口
@@ -290,5 +302,15 @@ class Geek:
 
 if __name__ == '__main__':
 	geek = Geek(COOKIE, PROXY)
-	# geek.run()
-	geek.getZhuanlan(116, 0, order = 'earliest')
+	geek.initAllMySubs()
+	if len(sys.argv) > 1 and sys.argv[1].isdigit():
+		print("download %s" % sys.argv[1])
+		geek.getZhuanlan(int(sys.argv[1]), 0, order='earliest')
+		genIndexHtml()
+		print("download finished!!!")
+		exit(0)
+
+	print("download all my subscribes")
+	geek.run()
+	genIndexHtml()
+	print("download finished!!!")
