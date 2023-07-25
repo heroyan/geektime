@@ -3,7 +3,7 @@ import os
 
 def genIndexHtmlOne(rootDir, name):
     with open('%s/index.html' % rootDir, 'w') as index:
-        index.write('<title>%s</title>' % name)
+        index.write('<meta charset="UTF-8"><title>%s</title>' % name)
         index.write('<script>function alterTitle(title){document.title=title;}</script><style>.main{width:100%;height: 100%;} .side {float:left;max-width:200px;height:100%;overflow:scroll;border:1px solid;} .content {overflow:hidden;} </style>\n')
         index.write('<div class="main"><div class="side">')
         for root, dirs, files in os.walk(rootDir):
