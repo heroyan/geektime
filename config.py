@@ -15,7 +15,7 @@ PROXY = {
 NEED_MP3 = False
 
 # 每篇文章下载间隔，单位秒，防止被限流或者 ip 被禁
-INTERVAL = 2
+INTERVAL = 1
 
 # 初始的专栏列表，可以置空
 ZHUAN_DICT = {

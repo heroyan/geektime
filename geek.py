@@ -12,17 +12,17 @@ from genIndexHtml import genIndexHtml
 class Geek:
 	'''docstring for Geek'''
 	def __init__(self, cookie, proxy = None):
-		user_agent = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.110 Safari/537.36'
+		self.user_agent = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.110 Safari/537.37'
 		self.proxy = proxy
 		self.headers = { 
-			'User-Agent' : user_agent,
+			'User-Agent' : self.user_agent,
 			'Content-Type' : 'application/json',
 			'Referer' : 'https://time.geekbang.org/column/110',
 			'Cookie': cookie
 
 		}
 		self.static_headers = {
-			'User-Agent' : user_agent,
+			'User-Agent' : self.user_agent,
 			'authority' : 'static001.geekbang.org',
 			'method' : 'GET',
 			'scheme' : 'https',
@@ -83,7 +83,7 @@ class Geek:
 		'''得到某个专栏内容
 		'''
 		url = self.api.get('getArticleContent')
-		data = {'id':article_id, 'include_neighbors':True}
+		data = {'id':article_id, 'include_neighbors':True, 'is_freelyread': True}
 
 		ret = self.__request(url, data)
 
@@ -231,6 +231,8 @@ class Geek:
 
 		if headers is None:
 			headers = self.headers
+			# 自动修改 user-agent，每次都更新下，加当前时间戳, 以免被加加入 ua black list
+			headers['User-Agent'] = '%s.%s' % (self.user_agent, time.time())
 
 		if data is not None:
 			request = urllib2.Request(url, json.dumps(data), headers)
